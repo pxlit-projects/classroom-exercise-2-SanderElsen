@@ -2,6 +2,8 @@ package be.pxl.spring.rest.fallout;
 
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
+
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,8 +30,10 @@ public class MemorableQuotesController {
     }
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.CREATED)
-    Quote addQuote(@RequestBody Quote quote) {
+    Quote addQuote(@RequestBody Quote quote,HttpServletResponse response) {
+        quote.setId(String.valueOf(quotes.size()+1));
         quotes.add(quote);
+        response.setHeader("location",QUOTE_BASE_URL+"/"+quote.getId());
         return quote;
     }
 }
